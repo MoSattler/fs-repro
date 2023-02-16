@@ -5,6 +5,7 @@ import Users from './collections/Users';
 
 import { cloudStorage } from "@payloadcms/plugin-cloud-storage";
 import { s3Adapter } from "@payloadcms/plugin-cloud-storage/s3";
+import Media from './collections/Media';
 
 const doS3Adapter = s3Adapter({
   config: {
@@ -24,6 +25,7 @@ export default buildConfig({
   },
   collections: [
     Users,
+    Media,
     // Add Collections here
     // Examples,
   ],
@@ -33,4 +35,13 @@ export default buildConfig({
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
-});
+  plugins: [
+    cloudStorage({
+      collections: {
+        media: {
+          adapter: doS3Adapter,
+        },
+      },
+    }),
+  ],
+})
